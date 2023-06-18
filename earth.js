@@ -4,9 +4,13 @@ window.addEventListener("load", Earth())
 
 function Earth() {
     GetEarthImage()
+
+    setInterval(()=>{
+        GetEarthImage()
+    }, 10000)
 }
 
-
+let attempts = 0
 
 function GetEarthImage() {
     fetch('capitals.json')
@@ -28,47 +32,38 @@ function GetEarthImage() {
 
         const url = `https://api.nasa.gov/planetary/earth/imagery?${queryString}`
 
-        fetchImage(url)
-        .then((imageBlob) => {
-            var objectURL = URL.createObjectURL(imageBlob);
-            document.getElementById("earth").src = objectURL;
-            document.getElementById("earth-caption").innerText = `${capital.CapitalName}, ${capital.CountryName}`
-            document.getElementById("longitude").innerText = capital.CapitalLongitude
-            document.getElementById("latitude").innerText = capital.CapitalLatitude
-            document.getElementById("date").innerText = date
+        //Because the API sometimes gives 404 errors
+        fetch(url)
+        .then((response) => {
+          if (response.ok) {
+            response.blob()
+            .then((blob) => {
+                var objectURL = URL.createObjectURL(blob);
+                document.getElementById("earth").src = objectURL;
+                document.getElementById("earth-caption").innerText = `${capital.CapitalName}, ${capital.CountryName}`
+                document.getElementById("longitude").innerText = capital.CapitalLongitude
+                document.getElementById("latitude").innerText = capital.CapitalLatitude
+                document.getElementById("date").innerText = date
+            })
+            .catch(() => {
+                displayKittykat()
+            });
+          } 
+          else if (response.status === 404 && attempts < maxRetries) {
+            attempts++;
+            loadImage();
+          } 
+          else {
+            console.warn(`Failed to fetch image: ${response.status}`);
+            displayKittykat()
+          }
         })
-        .catch(() => {
-            document.getElementById("earth").src = "kitten.png"
-            document.getElementById("earth-caption").innerText = 'Looks like we weren\'t table to find the image, so heres a cat'
+        .catch((error) => {
+          console.warn(`Failed to fetch image: ${error.message}`);
+          displayKittykat()
         });
     });
 }
-
-//Because the API sometimes gives 404 errors
-function fetchImage(url, maxRetries = 3) {
-    let retries = 0;
-  
-    return new Promise((resolve, reject) => {
-      function loadImage() {
-        fetch(url)
-          .then((response) => {
-            if (response.ok) {
-              resolve(response.blob());
-            } else if (response.status === 404 && retries < maxRetries) {
-              retries++;
-              loadImage();
-            } else {
-              reject(new Error(`Failed to fetch image: ${response.status}`));
-            }
-          })
-          .catch((error) => {
-            reject(new Error(`Failed to fetch image: ${error.message}`));
-          });
-      }
-  
-      loadImage();
-    });
-  }
 
 function generateRandomDate() {
     var startDate = new Date('2015-01-01');
@@ -82,4 +77,9 @@ function generateRandomDate() {
     var day = String(randomDate.getDate()).padStart(2, '0');
   
     return `${year}-${month}-${day}`;
+}
+
+function displayKittykat() {
+    document.getElementById("earth").src = "kitten.png"
+    document.getElementById("earth-caption").innerText = 'Looks like we weren\'t table to find the image, so heres a cat'
 }

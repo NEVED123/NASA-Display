@@ -17,33 +17,14 @@ const rovers = [curiosity,opportunity,spirit]
 
 window.addEventListener("load", Mars())
 
+let attempts = 0;
+
 function Mars() {
-    let attempts = 0;
-
     GetMarsImage()
-        .then((photo)=>{
-            const src = photo.img_src
-            const fullCamName = photo.camera.full_name
-            const roverName = photo.rover.name
-        
-            document.getElementById("mars").src = src
-            document.getElementById("rover-name").innerText = roverName
-            document.getElementById("sol").innerText = `Sol: ${sol}`
-            document.getElementById("camera").innerText = `Camera: ${fullCamName}`
-        })
-        .catch(()=>{
-            if(attempts < 3){
-                attempts++;
-                GetMarsImage()
-            }
-            else
-            {
-                document.getElementById("mars").src = "kitten.png"
-                document.getElementById("rover-name").innerText = 'Looks like we weren\'t table to find the image, so heres a cat'                
-            }
 
-        })
-
+    setInterval(()=>{
+        GetEarthImage()
+    }, 120000)
 }
 
 function GetMarsImage() {
@@ -62,24 +43,69 @@ function GetMarsImage() {
 
     const queryString = new URLSearchParams(params).toString();
 
-    const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/${name}/photos?${queryString}`
+    const url = `https://api.nasa.gov/mars-photos/api/v1/rovers/${name}/phsdfgotos?${queryString}`
 
     //TODO: HANDLE EMPTY QUERY RESULTS
-    return new Promise((resolve, reject)=>{
-        fetch(url)
-        .then((response) => response.json())
-        .then((mars) => {
-            const photos = mars.photos
-            if(photos.length > 0)
-            {
-                const photo = photos[Math.floor(Math.random() * photos.length)]
-                resolve(photo)
-            }
-            else
-            {
-                reject()
-            }
-        })
-        .catch(()=>reject());
+    fetch(url)
+    .then((response) => {
+        if(response.ok)
+        {
+            response.json()
+            .then((mars) => {
+                const photos = mars.photos
+                if(photos.length > 0) {
+                    const photo = photos[Math.floor(Math.random() * photos.length)]
+        
+                    const src = photo.img_src
+                    const fullCamName = photo.camera.full_name
+                    const roverName = photo.rover.name
+                
+                    document.getElementById("mars").src = src
+                    document.getElementById("rover-name").innerText = roverName
+                    document.getElementById("sol").innerText = `Sol: ${sol}`
+                    document.getElementById("camera").innerText = `Camera: ${fullCamName}`
+                }
+                else if(attempts < 3) {
+                    attempts++;
+                    console.log(attempts)
+                    GetMarsImage()
+                }
+                else {
+                    console.warn(`Error resolving request: ${response.status}`)
+                    displayKittykat()
+                }
+            })
+            .catch((error)=>{
+                console.warn(`Error resolving request: ${error.message}`)
+                displayKittykat()
+            })
+        }
+        else if(attempts < 3) {
+            attempts++;
+            GetMarsImage()
+        }
+        else {
+            console.warn(`Error resolving request: ${response.status}`)
+            displayKittykat()
+        }
+        
     })
+    .catch((error)=>{
+        if(attempts < 3)
+        {
+            attempts++;
+            GetMarsImage()
+        }
+        else
+        {
+            console.warn(`Unable to make request: ${error.message}`)
+            displayKittykat()
+        }
+
+    });
 }
+
+function displayKittykat() {
+    document.getElementById("mars").src = "kitten.png"
+    document.getElementById("rover-name").innerText = 'Looks like we weren\'t table to find the image, so heres a cat'   
+}   
