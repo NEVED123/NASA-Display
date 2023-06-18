@@ -7,7 +7,7 @@
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
   <link rel="stylesheet" type="text/css" href="styles.css">
   <script type="module" src="earth.js"></script>
-  
+  <script type="module" src="mars.js"></script>
   <title>Responsive Bootstrap Carousel</title>
 </head>
 
@@ -35,13 +35,12 @@
       </div>
       <div class="carousel-item">
         <div class="d-flex justify-content-center">
-          <img class="d-block vh-100" src="https://picsum.photos/200" alt="Slide 2">
+          <img class="d-block vh-100" id="mars" alt="Slide 2">
         </div>
         <div class="carousel-caption d-none d-md-block">
-          <h5 id="earth-caption" style="text-shadow: 1px 0 0 #000, 0 -1px 0 #000, 0 1px 0 #000, -1px 0 0 #000;"></h5>
-          <p id="latitude"></p>
-          <p id="longitude"></p>
-          <p id="date"></p>
+          <h5 id="rover-name"></h5>
+          <p id="sol"></p>
+          <p id="camera"></p>
         </div>       
       </div>
       <div class="carousel-item">

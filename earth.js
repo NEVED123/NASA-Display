@@ -2,8 +2,6 @@ import { key } from "./key.js";
 
 window.addEventListener("load", Earth())
 
-let buffer
-
 function Earth() {
     GetEarthImage()
     setInterval(()=>{
@@ -11,6 +9,7 @@ function Earth() {
     },60000)
 }
 
+//TODO: HANDLE 404 ERROR
 function GetEarthImage() {
     fetch('capitals.json')
     .then((response) => response.json())
@@ -50,4 +49,4 @@ function generateRandomDate() {
     var day = String(randomDate.getDate()).padStart(2, '0');
   
     return `${year}-${month}-${day}`;
-  }
+}
