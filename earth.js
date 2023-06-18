@@ -2,67 +2,94 @@ import { key } from "./key.js";
 
 window.addEventListener("load", Earth())
 
-function Earth() {
+function Earth()
+{
     GetEarthImage()
 
     setInterval(()=>{
-        GetEarthImage()
-    }, 10000)
+        GetEarthImage
+    },120000)
 }
-
-let attempts = 0
 
 function GetEarthImage() {
     fetch('capitals.json')
     .then((response) => response.json())
     .then((capitals) => {
         const numCapitals = capitals.length
-        const random_number = Math.floor(Math.random() * numCapitals);
-        const capital = capitals[random_number]
-        const date = generateRandomDate()
-        
-        const params = {
-            lat: capital.CapitalLatitude,
-            lon: capital.CapitalLongitude,
-            date: date,
-            api_key: key  
+
+        for(let i = 1;i<=3;i++)
+        {
+            const random_number = Math.floor(Math.random() * numCapitals);
+            const capital = capitals[random_number]
+            const date = generateRandomDate()
+            
+            const params = {
+                lat: capital.CapitalLatitude,
+                lon: capital.CapitalLongitude,
+                date: date,
+                api_key: key  
+            }
+    
+            const queryString = new URLSearchParams(params).toString();
+    
+            const url = `https://api.nasa.gov/planetary/earth/imagery?${queryString}`      
+            
+            GetEarthImageUrl(url)
+            .then((url)=>{
+                document.getElementById(`earth-${i}`).src = url;
+                document.getElementById(`earth-caption-${i}`).innerText = `${capital.CapitalName}, ${capital.CountryName}`
+                document.getElementById(`longitude-${i}`).innerText = capital.CapitalLongitude
+                document.getElementById(`latitude-${i}`).innerText = capital.CapitalLatitude
+                document.getElementById(`date-${i}`).innerText = date
+            })
+            .catch((kitten)=>{
+                document.getElementById(`earth-${i}`).src = kitten
+                document.getElementById(`earth-caption-${i}`).innerText = `Looks like we couldn't find the picture, so here's a cat`
+                document.getElementById(`longitude-${i}`).innerText = ""
+                document.getElementById(`latitude-${i}`).innerText = ""
+                document.getElementById(`date-${i}`).innerText = ""
+            })
+        }
+    });
+}
+
+//Because the API sometimes gives 404 errors
+function GetEarthImageUrl(url)
+{
+    let attempts = 0
+    return new Promise((resolve, reject)=>{
+
+        function GetImage(){
+            fetch(url)
+            .then((response) => {
+              if (response.ok) {
+                response.blob()
+                .then((blob) => {
+                    const imgUrl = URL.createObjectURL(blob);
+                    resolve(imgUrl)
+                })
+                .catch(() => {
+                    reject("kitten.png")
+                });
+              } 
+              else if (attempts < 3) {
+                attempts++;
+                GetImage()
+              } 
+              else {
+                console.warn(`Failed to fetch image: ${response.status}`);
+                reject("kitten.png")
+              }
+            })
+            .catch((error) => {
+              console.warn(`Failed to fetch image: ${error.message}`);
+              reject("kitten.png")
+            });
         }
 
-        const queryString = new URLSearchParams(params).toString();
+        GetImage()
+    })
 
-        const url = `https://api.nasa.gov/planetary/earth/imagery?${queryString}`
-
-        //Because the API sometimes gives 404 errors
-        fetch(url)
-        .then((response) => {
-          if (response.ok) {
-            response.blob()
-            .then((blob) => {
-                var objectURL = URL.createObjectURL(blob);
-                document.getElementById("earth").src = objectURL;
-                document.getElementById("earth-caption").innerText = `${capital.CapitalName}, ${capital.CountryName}`
-                document.getElementById("longitude").innerText = capital.CapitalLongitude
-                document.getElementById("latitude").innerText = capital.CapitalLatitude
-                document.getElementById("date").innerText = date
-            })
-            .catch(() => {
-                displayKittykat()
-            });
-          } 
-          else if (response.status === 404 && attempts < maxRetries) {
-            attempts++;
-            loadImage();
-          } 
-          else {
-            console.warn(`Failed to fetch image: ${response.status}`);
-            displayKittykat()
-          }
-        })
-        .catch((error) => {
-          console.warn(`Failed to fetch image: ${error.message}`);
-          displayKittykat()
-        });
-    });
 }
 
 function generateRandomDate() {
@@ -77,9 +104,4 @@ function generateRandomDate() {
     var day = String(randomDate.getDate()).padStart(2, '0');
   
     return `${year}-${month}-${day}`;
-}
-
-function displayKittykat() {
-    document.getElementById("earth").src = "kitten.png"
-    document.getElementById("earth-caption").innerText = 'Looks like we weren\'t table to find the image, so heres a cat'
 }

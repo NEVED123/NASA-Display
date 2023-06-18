@@ -11,47 +11,88 @@
   <title>Responsive Bootstrap Carousel</title>
 </head>
 
-<body>
+<body class="bg-secondary">
   <div id="myCarousel" class="carousel slide vh-100" data-ride="carousel">
     <!-- Indicators -->
     <ol class="carousel-indicators">
       <li data-target="#myCarousel" data-slide-to="0" class="active"></li>
       <li data-target="#myCarousel" data-slide-to="1"></li>
       <li data-target="#myCarousel" data-slide-to="2"></li>
+      <li data-target="#myCarousel" data-slide-to="3"></li>
+      <li data-target="#myCarousel" data-slide-to="4"></li>
+      <li data-target="#myCarousel" data-slide-to="5"></li>
+      
     </ol>
 
     <!-- Slides -->
     <div class="carousel-inner">
+      <!-- Earth 1 -->
       <div class="carousel-item active">
         <div class="d-flex justify-content-center">
-          <img class="d-block vh-100" id="earth" alt="Slide 1">
+          <img class="d-block vh-100" id="earth-1">
         </div>
         <div class="carousel-caption d-none d-md-block">
-          <h5 id="earth-caption" class="black-outline"></h5>
-          <p id="latitude" class="black-outline"></p>
-          <p id="longitude" class="black-outline"></p>
-          <p id="date" class="black-outline"></p>
+          <h5 id="earth-caption-1" class="black-outline"></h5>
+          <p id="latitude-1" class="black-outline"></p>
+          <p id="longitude-1" class="black-outline"></p>
+          <p id="date-1" class="black-outline"></p>
         </div>
       </div>
+      <!-- Mars 1 -->
       <div class="carousel-item">
         <div class="d-flex justify-content-center">
-          <img class="d-block vh-100" id="mars" alt="Slide 2">
+          <img class="d-block vh-100" id="mars-1">
         </div>
         <div class="carousel-caption d-none d-md-block">
-          <h5 id="rover-name"></h5>
-          <p id="sol"></p>
-          <p id="camera"></p>
+          <h5 id="rover-name-1" class="black-outline"></h5>
+          <p id="sol-1" class="black-outline"></p>
+          <p id="camera-1" class="black-outline"></p>
         </div>       
       </div>
+      <!-- Earth 2 -->
       <div class="carousel-item">
         <div class="d-flex justify-content-center">
-          <img class="d-block vh-100" src="https://picsum.photos/200" alt="Slide 3">
+          <img class="d-block vh-100" id="earth-2">
         </div>
         <div class="carousel-caption d-none d-md-block">
-          <h5 id="earth-caption" class="black-outline"></h5>
-          <p id="latitude"></p>
-          <p id="longitude"></p>
-          <p id="date"></p>
+          <h5 id="earth-caption-2" class="black-outline"></h5>
+          <p id="latitude-2" class="black-outline"></p>
+          <p id="longitude-2" class="black-outline"></p>
+          <p id="date-2" class="black-outline"></p>
+        </div>
+      </div>
+      <!-- Mars 2 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center">
+          <img class="d-block vh-100" id="mars-2">
+        </div>
+        <div class="carousel-caption d-none d-md-block">
+          <h5 id="rover-name-2" class="black-outline"></h5>
+          <p id="sol-2" class="black-outline"></p>
+          <p id="camera-2" class="black-outline"></p>
+        </div>       
+      </div>
+       <!-- Earth 3 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center">
+          <img class="d-block vh-100" id="earth-3">
+        </div>
+        <div class="carousel-caption d-none d-md-block">
+          <h5 id="earth-caption-3" class="black-outline"></h5>
+          <p id="latitude-3" class="black-outline"></p>
+          <p id="longitude-3" class="black-outline"></p>
+          <p id="date-3" class="black-outline"></p>
+        </div>
+      </div>
+      <!-- Mars 3 -->
+      <div class="carousel-item">
+        <div class="d-flex justify-content-center">
+          <img class="d-block vh-100" id="mars-3">
+        </div>
+        <div class="carousel-caption d-none d-md-block">
+          <h5 id="rover-name-3" class="black-outline"></h5>
+          <p id="sol-3" class="black-outline"></p>
+          <p id="camera-3" class="black-outline"></p>
         </div>       
       </div>
       </div>
@@ -68,13 +109,14 @@
     </a>
   </div>
 
-  <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+  <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
   <script>
     $(document).ready(function() {
       $('#myCarousel').carousel({
-        interval: 5000 // Switch slide every 5 seconds (5000 milliseconds)
+        interval: 30000
       });
     });
   </script>
