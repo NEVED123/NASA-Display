@@ -6,9 +6,8 @@ function Earth() {
     GetEarthImage()
 }
 
-let json
 
-//TODO: HANDLE 404 ERROR
+
 function GetEarthImage() {
     fetch('capitals.json')
     .then((response) => response.json())
@@ -38,7 +37,7 @@ function GetEarthImage() {
             document.getElementById("latitude").innerText = capital.CapitalLatitude
             document.getElementById("date").innerText = date
         })
-        .catch((error) => {
+        .catch(() => {
             document.getElementById("earth").src = "kitten.png"
             document.getElementById("earth-caption").innerText = 'Looks like we weren\'t table to find the image, so heres a cat'
         });
