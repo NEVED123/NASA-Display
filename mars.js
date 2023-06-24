@@ -1,13 +1,13 @@
 import { key } from "./key.js";
 
-window.addEventListener("load", Mars())
+window.addEventListener("DOMContentLoaded", Mars())
 
 function Mars() {
     GetMarsImage()
 
     setInterval(()=>{
         GetMarsImage()
-    }, 120000)
+    }, 9000)
 }
 
 function GetMarsImage() {
